@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "{{doc('stg_customer_desc')}}"
+    columns:
+      - name: customerid
+        description: "{{doc('stg_customerid_desc')}}"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_products
+    description: "product master data for qwt analytics"
+    columns:
+      - name: productid
+        description: "identify each product uniquely in product master data"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_employees
+    description: "employees master data for qwt analytics"
+    columns:
+      - name: empid
+        description: "identify each employees uniquely in employee master data"
+        tests:
+          - unique
+          - not_null
+          - is_even
+
+  - name: stg_shipments
+    description: "shipments data for orders loaded from raw shipments"
+    columns:
+      - name: status
+        description: "Status of the values"
+        tests:
+          - accepted_values:
+              values: ['shipped', 'returned', 'ordered', 'replaced']
+
+  - name: stg_orderdetails
+    description: "order details picked from stage orders"
+    columns:
+      - name: orderid
+        description: "orderid details merged from stage orders"
+        tests:
+          - relationships:
+              field: orderid
+              to: ref('stg_orders')
